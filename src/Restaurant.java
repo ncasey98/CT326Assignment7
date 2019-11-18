@@ -28,7 +28,7 @@ public class Restaurant {
 	private final Condition bufferNotFull = lock.newCondition();
 	private final Condition bufferNotEmpty = lock.newCondition();
 	
-	//private Integer orderProcessedNumber;
+	// private static Integer orderProcessedCount;
 	
 	public void cook() throws InterruptedException {
 		lock.lock();
@@ -166,26 +166,30 @@ public class Restaurant {
 			if (!queueToWrite.isEmpty()) {
 				Chef chef = new Chef(restaurant, "Chef Mark");
 				chef.start();
-			}
-			if (!queueToWrite.isEmpty()) {
 				Chef chefEile = new Chef(restaurant, "Chef John");
 				chefEile.start();
 			}
 			if (!queue.isEmpty()) {
 				Server server = new Server(restaurant, "Server Katie");
 				server.start();
-			}
-			if (!queue.isEmpty()) {
 				Server serverEile = new Server(restaurant, "Server Andrew");
 				serverEile.start();
-			}
-			if (!queue.isEmpty()) {
 				Server serverDeireanach = new Server(restaurant, "Server Emily");
 				serverDeireanach.start();
 			}
 			if (queueToWrite.isEmpty() && queue.isEmpty()) {
 				break;
 			}
+		}
+		
+		// This only iterates through the outside hashmap of 'preparingHistory', I could not figure 
+		// out how to iterate through the inside hashmap, which contains the count of number of dishes
+		// each Chef has prepared
+		for (Object name : preparingHistory.keySet()) {
+			System.out.println(name + " finished serving ?? orders, including " + preparingHistory.get(name));
+		}
+		for (Object name : servingHistory.keySet()) {
+			System.out.println(name + " finished serving ?? orders, including " + servingHistory.get(name));
 		}
 	}
 }
